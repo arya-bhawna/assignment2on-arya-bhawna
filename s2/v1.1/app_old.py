@@ -144,9 +144,9 @@ def read_orig_artist(music_id):
         }
         return app.make_response((response, 404))
     item = response.json()['Items'][0]
-    oa = (item['OrigArtist'] if 'OrigArtist' in item
+    oa = (item['orig_artist'] if 'orig_artist' in item
           else None)
-    return {'OrigArtist': oa}
+    return {'orig_artist': oa}
 
 
 @bp.route('/write_orig_artist/<music_id>', methods=['PUT'])
@@ -159,7 +159,7 @@ def write_orig_artist(music_id):
                         mimetype='application/json')
     try:
         content = request.get_json()
-        OrigArtist = content['OrigArtist']
+        orig_artist = content['orig_artist']
     except Exception:
         return json.dumps({"message": "error reading arguments"})
     payload = {"objtype": "music", "objkey": music_id}
@@ -167,7 +167,7 @@ def write_orig_artist(music_id):
     response = requests.put(
         url,
         params=payload,
-        json={"OrigArtist": OrigArtist},
+        json={"orig_artist": orig_artist},
         headers={'Authorization': headers['Authorization']})
     return (response.json())
 

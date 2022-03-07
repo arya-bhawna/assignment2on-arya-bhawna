@@ -10,8 +10,10 @@ import requests
 
 class Music():
     """Python API for the music service.
+
     Handles the details of formatting HTTP requests and decoding
     the results.
+
     Parameters
     ----------
     url: string
@@ -26,16 +28,18 @@ class Music():
         self._url = url
         self._auth = auth
 
-    def create(self, artist, song, OrigArtist=None):
+    def create(self, artist, song, orig_artist=None):
         """Create an artist, song pair.
+
         Parameters
         ----------
         artist: string
             The artist performing song.
         song: string
             The name of the song.
-        OrigArtist: string or None
+        orig_artist: string or None
             The name of the original performer of this song.
+
         Returns
         -------
         (number, string)
@@ -44,8 +48,8 @@ class Music():
         """
         payload = {'Artist': artist,
                    'SongTitle': song}
-        if OrigArtist is not None:
-            payload['OrigArtist'] = OrigArtist
+        if orig_artist is not None:
+            payload['OrigArtist'] = orig_artist
         r = requests.post(
             self._url,
             json=payload,
@@ -53,14 +57,17 @@ class Music():
         )
         return r.status_code, r.json()['music_id']
 
-    def write_orig_artist(self, m_id, OrigArtist):
+    def write_orig_artist(self, m_id, orig_artist):
         """Write the original artist performing a song.
+
         Parameters
         ----------
         m_id: string
             The UUID of this song in the music database.
-        OrigArtist: string
+
+        orig_artist: string
             The original artist performing the song.
+
         Returns
         -------
         number
@@ -68,27 +75,30 @@ class Music():
         """
         r = requests.put(
             self._url + 'write_orig_artist/' + m_id,
-            json={'OrigArtist': OrigArtist},
+            json={'orig_artist': orig_artist},
             headers={'Authorization': self._auth}
         )
         return r.status_code
 
     def read(self, m_id):
         """Read an artist, song pair.
+
         Parameters
         ----------
         m_id: string
             The UUID of this song in the music database.
+
         Returns
         -------
-        status, artist, title, OrigArtist
+        status, artist, title, orig_artist
+
         status: number
             The HTTP status code returned by Music.
         artist: If status is 200, the artist performing the song.
           If status is not 200, None.
         title: If status is 200, the title of the song.
           If status is not 200, None.
-        OrigArtist: If status is 200 and the song has an
+        orig_artist: If status is 200 and the song has an
           original artist field, the artist's name.
           If the status is not 200 or there is no original artist
           field, None.
@@ -107,16 +117,19 @@ class Music():
 
     def read_orig_artist(self, m_id):
         """Read the orginal artist of a song.
+
         Parameters
         ----------
         m_id: string
             The UUID of this song in the music database.
+
         Returns
         -------
-        status, OrigArtist
+        status, orig_artist
+
         status: number
             The HTTP status code returned by Music.
-        OrigArtist:
+        orig_artist:
           If status is 200, the original artist who
             performed the song.
           If status is not 200, None.
@@ -128,14 +141,16 @@ class Music():
         if r.status_code != 200:
             return r.status_code, None
         item = r.json()
-        return r.status_code, item['OrigArtist']
+        return r.status_code, item['orig_artist']
 
     def delete(self, m_id):
         """Delete an artist, song pair.
+
         Parameters
         ----------
         m_id: string
             The UUID of this song in the music database.
+
         Returns
         -------
         Does not return anything. The music delete operation
