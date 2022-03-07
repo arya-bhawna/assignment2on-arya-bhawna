@@ -75,8 +75,10 @@ def test_full_cycle(mserv):
     # ... Fill in the test ...
     trc, m_id = mserv.create(song[0], song[1], orig_artist)
     assert trc == 200
+    # called read_orig_artist as per music.py to read og artist
     trc, oa = mserv.read_orig_artist(m_id)
     assert trc == 200 and oa == orig_artist
+    # called write_orig_artist as per music.py to insert og artist
     trc = mserv.write_orig_artist(m_id, orig_orig_artist)
     assert trc == 200
     trc, artist, title, oa = mserv.read(m_id)
