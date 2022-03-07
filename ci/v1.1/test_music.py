@@ -26,7 +26,7 @@ def song(request):
     return ('Elvis Presley', 'Hound Dog')
 
 
-def test_simple_run(mserv, song):
+def test_simple_run(mserv, song,orig_artist):
     # Original recording, 1952
     orig_artist = 'Big Mama Thornton'
     trc, m_id = mserv.create(song[0], song[1], orig_artist)
